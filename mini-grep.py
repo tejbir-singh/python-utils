@@ -1,36 +1,75 @@
+# mini-grep.py
+
 import os
 import argparse
+import re
+import sys
 
+def process_file(files: list, regex: str, skip_line_number=False) -> None:
+    pass
 
-def parse_arguments():
+def process_stdin(stdin: str, regex: str) -> None:
+    pass
+
+def init_argparse() -> argparse.ArgumentParser:
     # Create the parser
-    args_parser = argparse.ArgumentParser(prog='mini-grep',
+    parser = argparse.ArgumentParser(prog='mini-grep',
                                           usage='%(prog)s [-q] -e PATTERN [FILE...]',
                                           description='Find regex PATTERN in files and output line number '
                                                       'for each line where match is found',
                                           add_help=True)
     # Add the arguments
-    args_parser.add_argument('-e',
-                             metavar='pattern',
-                             nargs='*',
-                             type=str,
-                             help='regex pattern to match',
-                             )
+    parser.add_argument('-e', '--regex',
+                        type=str,
+                        nargs='+',
+                        action='store',
+                        help='regex pattern to match'
+                        )
 
-    args_parser.add_argument('-q',
-                             action='store_true',
-                             help='Output lines with regexp match but omit matching line numbers')
+    parser.add_argument('-q', '--skip-line-number',
+                        action='store_true',
+                        help='Output lines with regexp match but omit matching line numbers')
 
-    # Execute the parse_args() method
-    args = args_parser.parse_args()
-    print(vars(args))
-    return args
+    parser.add_argument('-f', '--file',
+                        action='store',
+                        type=str,
+                        nargs='*',
+                        help='One or more files')
 
-
-def main():
-    parsed_args = parse_arguments()
-    # regexp = parsed_args.Pattern
-    # file_list = parsed_args.Files
+    return parser
 
 
-main()
+def main() -> None:
+    parser = init_argparse()
+    args = parser.parse_args()
+    regex_str = ''
+    std_input = ''
+    files_lst = []
+
+    if args.regex and len(args.regex) == 1:
+        regex_str = args.regex[0]
+    elif len(args.regex) > 1:
+        regex_str = args.regex[0]
+        std_input = args.regex[1:]
+
+    if args.file:
+        files_lst = args.file
+
+    try:
+        re.compile(regex_str)
+        is_valid_regex = True
+    except re.error:
+        print('Invalid regex. Exiting.')
+        sys.exit(1)
+
+    if is_valid_regex and args.file:
+        if args.q:
+            process_file(files_lst, regex_str, skip_line_number=True)
+        else:
+            process_file(files_lst, regex_str, skip_line_number=False)
+    elif is_valid_regex and std_input:
+        process_stdin(std_input, regex_str)
+
+
+if __name__ == "__main__":
+    main()
