@@ -1,22 +1,3 @@
-"""
-"mini-grep"
------------
-
-Usage:
-
-    ./mini-grep [-q] -e PATTERN [FILE...]
-
-`mini-grep` goes through every argument in FILE and prints the whole
-line in which PATTERN is found. By default `mini-grep` also outputs
-the line number of each printed line.
-
-- PATTERN has to be a valid regex
-- FILE can be zero or more arguments. If zero args are given,
-  `mini-grep` will parse entries from the standard input.
-- If given, the `-q` options only outputs lines but omits the matching
-  line numbers.
-"""
-
 import os
 import argparse
 
@@ -29,8 +10,9 @@ def parse_arguments():
                                                       'for each line where match is found',
                                           add_help=True)
     # Add the arguments
-    args_parser.add_argument('PATTERN',
-                             metavar='-e PATTERN',
+    args_parser.add_argument('-e',
+                             metavar='pattern',
+                             nargs='*',
                              type=str,
                              help='regex pattern to match',
                              )
@@ -39,21 +21,16 @@ def parse_arguments():
                              action='store_true',
                              help='Output lines with regexp match but omit matching line numbers')
 
-    args_parser.add_argument('-e',
-                             action='append',
-                             type=list,
-                             help='list of input to search for regexp, either a file(s) or standard input',
-                             )
-
     # Execute the parse_args() method
     args = args_parser.parse_args()
+    print(vars(args))
     return args
 
 
 def main():
     parsed_args = parse_arguments()
-    regexp = parsed_args.Pattern
-    file_list = parsed_args.Files
+    # regexp = parsed_args.Pattern
+    # file_list = parsed_args.Files
 
 
 main()
