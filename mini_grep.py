@@ -4,6 +4,7 @@ import os.path
 import argparse
 import re
 import sys
+import pathlib
 
 
 def process_file(files: list, regex: str, skip_line_number=False) -> None:
@@ -14,8 +15,9 @@ def process_file(files: list, regex: str, skip_line_number=False) -> None:
     :param skip_line_number:
     :return:
     """
+
     for file in files:
-        if os.path.isfile(file):
+        if pathlib.Path(file).exists():
             with open(file) as f:
                 lines = f.readlines()
                 try:
@@ -27,6 +29,9 @@ def process_file(files: list, regex: str, skip_line_number=False) -> None:
                             print(f"{line.rstrip()}")
                 except():
                     print('Match not found')
+        else:
+            print("Invalid file path")
+            continue
 
 
 def process_stdin(regex: str) -> None:
