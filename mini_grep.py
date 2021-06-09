@@ -77,8 +77,6 @@ def main() -> None:
     regex_str = ''
     files_lst = []
 
-    print(vars(args))
-
     if args.regex and len(args.regex) == 1:
         regex_str = args.regex[0]
 
