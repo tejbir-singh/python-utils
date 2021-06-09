@@ -5,6 +5,7 @@ import argparse
 import re
 import sys
 
+
 def process_file(files: list, regex: str, skip_line_number=False) -> None:
     for file in files:
         if os.path.isfile(file):
@@ -14,7 +15,7 @@ def process_file(files: list, regex: str, skip_line_number=False) -> None:
                     for idx, line in enumerate(lines):
                         regex_match = re.search(regex, line)
                         if regex_match and not skip_line_number:
-                            print(f"{line.rstrip(), 'line ' +  str(idx + 1)}")
+                            print(f"{idx + 1, line.rstrip()}")
                         elif regex_match and skip_line_number:
                             print(f"{line.rstrip()}")
                 except():
