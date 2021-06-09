@@ -7,6 +7,13 @@ import sys
 
 
 def process_file(files: list, regex: str, skip_line_number=False) -> None:
+    """
+    Search regex pattern on files and print line and line number if a match is found
+    :param files:
+    :param regex:
+    :param skip_line_number:
+    :return:
+    """
     for file in files:
         if os.path.isfile(file):
             with open(file) as f:
@@ -22,8 +29,19 @@ def process_file(files: list, regex: str, skip_line_number=False) -> None:
                     print('Match not found')
 
 
-def process_stdin(stdin: str, regex: str) -> None:
-    pass
+def process_stdin(regex: str) -> None:
+    """
+    Match regex pattern to input from standard input
+    :param regex:
+    :return:
+    """
+
+    stdin_fileno = sys.stdin
+    for line in stdin_fileno:
+        regex_match = re.search(regex, line)
+        if regex_match:
+            print(f"{line.rstrip()}")
+
 
 def init_argparse() -> argparse.ArgumentParser:
     # Create the parser
@@ -35,7 +53,7 @@ def init_argparse() -> argparse.ArgumentParser:
     # Add the arguments
     parser.add_argument('-e', '--regex',
                         type=str,
-                        nargs='+',
+                        nargs=1,
                         action='store',
                         help='regex pattern to match'
                         )
@@ -57,15 +75,12 @@ def main() -> None:
     parser = init_argparse()
     args = parser.parse_args()
     regex_str = ''
-    std_input = ''
     files_lst = []
-    # print(vars(args))
+
+    print(vars(args))
 
     if args.regex and len(args.regex) == 1:
         regex_str = args.regex[0]
-    elif len(args.regex) > 1:
-        regex_str = args.regex[0]
-        std_input = args.regex[1:]
 
     if args.file:
         files_lst = args.file
@@ -82,8 +97,8 @@ def main() -> None:
             process_file(files_lst, regex_str, skip_line_number=True)
         else:
             process_file(files_lst, regex_str, skip_line_number=False)
-    if is_valid_regex and std_input:
-        process_stdin(std_input, regex_str)
+    else:
+        process_stdin(regex_str)
 
 
 if __name__ == "__main__":
