@@ -4,14 +4,16 @@ import argparse
 import os
 import pathlib
 import time
+from typing import Union
 
 
-def process_file_path(f_paths: list, run_recursively=True):
-    # print(f"File Paths {f_paths}")
-
-    # need to check if a path is a file or a directory and list information accordingly
-    # if path is directory and recursive flag is on then need to list contents of the dir
-
+def process_file_path(f_paths: Union[list, str], run_recursively=True) -> None:
+    """
+    List owner, permissions, and last modified time information about file paths
+    :param f_paths:
+    :param run_recursively:
+    :return:
+    """
     for fpath in f_paths:
         file = pathlib.Path(fpath)
         status = os.stat(file)
@@ -56,9 +58,9 @@ def main() -> None:
     if not args.File_Path:
         file_path = os.getcwd()
         if args.recursive:
-            process_file_path(file_path, run_recursively=True)
+            process_file_path([file_path], run_recursively=True)
         else:
-            process_file_path(file_path, run_recursively=False)
+            process_file_path([file_path], run_recursively=False)
     else:
         if args.recursive:
             process_file_path(args.File_Path, run_recursively=True)
