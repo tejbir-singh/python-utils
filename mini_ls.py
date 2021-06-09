@@ -6,7 +6,7 @@ import pathlib
 import time
 
 
-def process_file_path(f_paths: list, run_recursively=True) -> None:
+def process_file_path(f_paths: list, run_recursively=False) -> None:
     """
     List owner, permissions, and last modified time information about file paths
     :param f_paths:
@@ -20,17 +20,17 @@ def process_file_path(f_paths: list, run_recursively=True) -> None:
             print(f"{file.name} {file.owner()} {oct(status.st_mode)[-3:]} {time.ctime(file.stat().st_mtime)}")
         else:
             print('File does not exist')
-
+"""
         if file.is_dir() and run_recursively:
             dir_paths = os.listdir(file)
-            print(f"{dir_paths}")
+            # print(f"{dir_paths}")
             process_file_path(dir_paths, run_recursively=True)
-
+"""
 
 def init_argparse() -> argparse.ArgumentParser:
     # Create the parser
     parser = argparse.ArgumentParser(prog='mini-ls',
-                                     usage='%(prog)s [-r] [FILE...]',
+                                     usage='%(prog)s [-r] -p [FILE...]',
                                      description='List owner, permission, and last modified time about the paths'
                                                  'given in FILE',
                                      add_help=True)
