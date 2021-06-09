@@ -1,12 +1,25 @@
-# mini-grep.py
+# mini_grep.py
 
-import os
+import os.path
 import argparse
 import re
 import sys
 
 def process_file(files: list, regex: str, skip_line_number=False) -> None:
-    pass
+    for file in files:
+        if os.path.isfile(file):
+            with open(file) as f:
+                lines = f.readlines()
+                try:
+                    for idx, line in enumerate(lines):
+                        regex_match = re.search(regex, line)
+                        if regex_match and not skip_line_number:
+                            print(f"{line.rstrip(), 'line ' +  str(idx + 1)}")
+                        elif regex_match and skip_line_number:
+                            print(f"{line.rstrip()}")
+                except():
+                    print('Match not found')
+
 
 def process_stdin(stdin: str, regex: str) -> None:
     pass
@@ -45,6 +58,7 @@ def main() -> None:
     regex_str = ''
     std_input = ''
     files_lst = []
+    # print(vars(args))
 
     if args.regex and len(args.regex) == 1:
         regex_str = args.regex[0]
@@ -63,11 +77,11 @@ def main() -> None:
         sys.exit(1)
 
     if is_valid_regex and args.file:
-        if args.q:
+        if args.skip_line_number:
             process_file(files_lst, regex_str, skip_line_number=True)
         else:
             process_file(files_lst, regex_str, skip_line_number=False)
-    elif is_valid_regex and std_input:
+    if is_valid_regex and std_input:
         process_stdin(std_input, regex_str)
 
 
