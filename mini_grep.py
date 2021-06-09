@@ -95,7 +95,7 @@ def main() -> None:
             process_file(files_lst, regex_str, skip_line_number=True)
         else:
             process_file(files_lst, regex_str, skip_line_number=False)
-    else:
+    elif is_valid_regex and not args.file:
         process_stdin(regex_str)
 
 
