@@ -23,7 +23,6 @@ def process_file_path(f_paths: list, run_recursively=False) -> None:
 """
         if file.is_dir() and run_recursively:
             dir_paths = os.listdir(file)
-            # print(f"{dir_paths}")
             process_file_path(dir_paths, run_recursively=True)
 """
 
