@@ -4,10 +4,9 @@ import argparse
 import os
 import pathlib
 import time
-from typing import Union
 
 
-def process_file_path(f_paths: Union[list, str], run_recursively=True) -> None:
+def process_file_path(f_paths: list, run_recursively=True) -> None:
     """
     List owner, permissions, and last modified time information about file paths
     :param f_paths:
@@ -66,8 +65,6 @@ def main() -> None:
             process_file_path(args.File_Path, run_recursively=True)
         else:
             process_file_path(args.File_Path, run_recursively=False)
-
-    # print(vars(args))
 
 
 if __name__ == "__main__":
